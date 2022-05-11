@@ -1,0 +1,26 @@
+* {
+    /* background: #222;  */
+    /* color: lightgreen; */
+    font-family: monospace;
+    font-size: min(5vh, 10mm);
+}
+
+#logo {
+    width: 64px;
+}
+
+#hanzi {
+    border: 1px solid red;
+}
+
+.navbar {
+    display: none;
+}
+
+button {
+    min-height: 10mm;
+}
+
+#stat * {
+    border: 1px solid #111;
+}

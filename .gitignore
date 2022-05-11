@@ -1,0 +1,11 @@
+*~
+*.swp
+*.log
+
+/hanzi/
+/docs/
+
+/__pycache__/
+*.pyc
+
+!.gitignore

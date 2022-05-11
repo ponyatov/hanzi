@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+        <meta name="color-scheme" content="dark">
+        <link href="/static/cdn/bootstrap-night.min.css" rel="stylesheet">
+
+        <title>sudu</title>
+        <link rel="shortcut icon" href="/static/logo.png">
+        <link rel="stylesheet" href="/static/css.css">
+        <script src="/static/cdn/jquery.min.js"></script>
+        {% block head %}{% endblock %}
+    </head>
+    <body class="container-fluid">
+      <nav class="navbar">
+        <img id="logo"  class="navbar-logo" src="/static/logo.png">
+        <span id="brand" class="navbar-brand h1">sudu</span>
+      </nav>
+
+      <div class="row">
+        <svg id="hanzi">
+          <!-- line label=a x1="0" y1="0" x2="100" y2="100" stroke="#DDD" /-->
+          <!-- line label=b x1="0" y1="111" x2="100" y2="0" stroke="#DDD" /-->
+        </svg>
+        <button id="go">go</button>
+        <span id="count">count</span>
+        <table id="stat">
+          <tr class="row">
+            <td class=col-3></td>
+            <td class=col-3>mis</td>
+            <td class=col-3>corr</td>
+            <td class=col-3>compl</td>
+          </tr>
+        </table>
+      </div>
+
+        <div class="row fixed-bottom">
+          <button class="col-6">1</button>
+          <button class="col-6">2</button>
+          <button class="col-6">3</button>
+          <button class="col-6">4</button>
+          <button class="col-6">5</button>
+          <button class="col-6">6</button>
+        </div>
+        {% block body %}{% endblock %}
+    </body>
+    <!-- script -->
+        <script src="/static/cdn/bootstrap.bundle.min.js"></script>
+        <script src="/static/cdn/hanzi-writer.js"></script>
+        <script src="/static/js.js"></script>
+        {% block script %}{% endblock %}
+</html>
