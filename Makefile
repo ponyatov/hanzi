@@ -68,7 +68,7 @@ update: $(OS)_update doc gz
 GNU_Linux_install:
 GNU_Linux_update:
 	sudo apt update
-	sudo apt install -yu `cat apt.dev apt.txt`
+	sudo apt install -yu `cat apt.txt`
 
 gz: \
 	static/cdn/hanzi-writer.js \
@@ -88,3 +88,25 @@ static/cdn/bootstrap.bundle.min.js:
 	$(CURL) $@ $(JSDLVR)/bootstrap@$(BS_VER)/dist/js/bootstrap.bundle.min.js
 static/cdn/bootstrap.bundle.min.js.map:
 	$(CURL) $@ $(JSDLVR)/bootstrap@$(BS_VER)/dist/js/bootstrap.bundle.min.js.map
+
+# \ merge
+MERGE  = Makefile README.md .clang-format doxy.gen $(S)
+MERGE += apt.dev apt.txt requirements.txt
+MERGE += .vscode bin doc lib src tmp
+MERGE += static templates
+
+dev:
+	git push -v
+	git checkout $@
+	git pull -v
+	git checkout shadow -- $(MERGE)
+
+shadow:
+	git push -v
+	git checkout $@
+	git pull -v
+
+release:
+	git tag $(NOW)-$(REL)
+	git push -v --tags
+	make $(shadow)
