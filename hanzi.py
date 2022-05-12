@@ -14,6 +14,42 @@ def sock(ws):
     while True:
         ws.send(ws.receive())
 
+voc = {
+    '零': 0, '一': 1, '二': 2, '三': 3, '四': 4,
+    '五': 5, '六': 6, '七': 7, '八': 8, '九': 9,
+    '十': 10,
+}
+
+@app.route('/voc.js')
+def vocjs(): return f'const voc = {voc};'
+
+mistake = {}
+
+@app.route('/mistake.js')
+def mistakejs(): return f'mistake = {mistake};'
+
+@app.route('/mis/<char>/<int:count>', methods=['PUT'])
+def mis(char, count):
+    mistake[char] = count; return ''
+
+correct = {}
+
+@app.route('/correct.js')
+def correctjs(): return f'correct = {correct};'
+
+@app.route('/corr/<char>/<int:count>', methods=['PUT'])
+def corr(char, count):
+    correct[char] = count; return ''
+
+complete = {}
+
+@app.route('/complete.js')
+def completejs(): return f'complete = {complete};'
+
+@app.route('/compl/<char>/<int:count>', methods=['PUT'])
+def compl(char, count):
+    complete[char] = count; return ''
+
 @app.route('/')
 def index(): return flask.render_template('index.html')
 

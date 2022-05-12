@@ -1,5 +1,4 @@
 ply
-readline
 Flask
 wsproto
 Flask-Sock

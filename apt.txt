@@ -1,2 +1,2 @@
-git make curl rsync
+git make curl rsync wget
 python3 python3-pip

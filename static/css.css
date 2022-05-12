@@ -2,7 +2,7 @@
     /* background: #222;  */
     /* color: lightgreen; */
     font-family: monospace;
-    font-size: min(5vh, 10mm);
+    font-size: min(5vh, 5mm);
 }
 
 #logo {
@@ -17,8 +17,9 @@
     display: none;
 }
 
-button {
-    min-height: 10mm;
+button,#count {
+    min-height: 5mm;
+    max-height: 10mm;
 }
 
 #stat * {

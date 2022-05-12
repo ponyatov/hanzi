@@ -89,7 +89,7 @@ static/cdn/bootstrap.bundle.min.js:
 static/cdn/bootstrap.bundle.min.js.map:
 	$(CURL) $@ $(JSDLVR)/bootstrap@$(BS_VER)/dist/js/bootstrap.bundle.min.js.map
 
-# \ merge
+# merge
 MERGE  = Makefile README.md .clang-format doxy.gen $(S)
 MERGE += apt.dev apt.txt requirements.txt
 MERGE += .vscode bin doc lib src tmp
@@ -109,4 +109,8 @@ shadow:
 release:
 	git tag $(NOW)-$(REL)
 	git push -v --tags
-	make $(shadow)
+	$(MAKE) shadow
+
+ZIP = tmp/$(MODULE)_$(NOW)_$(REL)_$(BRANCH).zip
+zip:
+	git archive --format zip --output $(ZIP) HEAD

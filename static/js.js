@@ -1,9 +1,10 @@
 
-const voc = ['零', '一', '二', '三'];
+// const voc = ['零', '一', '二', '三'];
+const keys = Object.keys(voc);
 
 const FADE = 1111;
 
-mistake = {};
+// mistake = {};
 
 function mis(char) {
   if (char in mistake)
@@ -11,9 +12,10 @@ function mis(char) {
   else
     mistake[char] = 1;
   $('#stat #' + char + ' #mis').text(mistake[char]);
+  $.ajax({method: 'PUT', url: `/mis/${char}/${mistake[char]}`});
 }
 
-correct = {};
+// correct = {};
 
 function cor(char) {
   if (char in correct)
@@ -21,9 +23,10 @@ function cor(char) {
   else
     correct[char] = 1;
   $('#stat #' + char + ' #corr').text(correct[char]);
+  $.ajax({method: 'PUT', url: `/corr/${char}/${correct[char]}`});
 }
 
-complete = {};
+// complete = {};
 
 function compl(char) {
   if (char in complete)
@@ -31,6 +34,7 @@ function compl(char) {
   else
     complete[char] = 1;
   $('#stat #' + char + ' #compl').text(complete[char]);
+  $.ajax({method: 'PUT', url: `/compl/${char}/${complete[char]}`});
 }
 
 function rnd(min, max) {
@@ -41,7 +45,7 @@ function rnd(min, max) {
 
 last = undefined;
 function randvoc() {
-  var char = voc[rnd(0, voc.length - 1)];
+  var char = keys[rnd(0, keys.length - 1)];
   if (char == last)
     return randvoc();
   else {
@@ -122,30 +126,46 @@ function nextQuiz() {
 }
 
 function statInit() {
-  voc.forEach(char => {
-    $('#stat tr:last').after(`
-          <tr id=${char} class=row>
+  keys.forEach(char => {
+    $('#stat tr:last')
+        .after(`
+          <tr id=${char}>
             <td          class=col-3>${char}</td>
-            <td id=mis   class=col-3></td>
-            <td id=corr  class=col-3></td>
-            <td id=compl class=col-3></td>
+            <td id=mis   class=col-3>${mistake[char] ? mistake[char] : ''}</td>
+            <td id=corr  class=col-3>${correct[char] ? correct[char] : ''}</td>
+            <td id=compl class=col-3>${
+            complete[char] ? complete[char] : ''}</td>
           </tr>`);
   });
 }
 
+function resize() {
+  ww = w();
+  vv = window.innerWidth - ww * 1.05;
+  console.log('resize', ww);
+  $('#hanzi').width(ww);
+  $('#hanzi').height(ww);
+  $('#buts').css({'width': ww + 'px'});
+  if (window.innerWidth >= 2 * ww) {
+    $('#ctl').css({'position': 'absolute', 'top': 0, 'right': 0});
+    $('#ctl').css({'width': vv + 'px'});
+    $('#stat').css({'width': vv + 'px'});
+  } else {
+    $('#ctl').css({'position': 'relative', 'top': 0, 'right': 0});
+    $('#ctl').css({'width': ww + 'px'});
+    $('#stat').css({'width': ww + 'px'});
+  }
+  // $('#hanzi #a').attr('x1',0);
+  // $('#hanzi #a').attr('y1',0);
+  // $('#hanzi #a').attr('x2',ww);
+  // $('#hanzi #a').attr('y2',ww);
+}
+
+
 $(() => {
   statInit();
   //
-  window.onresize = e => {
-    ww = w();
-    console.log('resize', ww);
-    $('#hanzi').width(ww);
-    $('#hanzi').height(ww);
-    // $('#hanzi #a').attr('x1',0);
-    // $('#hanzi #a').attr('y1',0);
-    // $('#hanzi #a').attr('x2',ww);
-    // $('#hanzi #a').attr('y2',ww);
-  };
+  window.onresize = resize;
   $(window).trigger('resize');
   //
   $('#go').on('click', (e) => nextQuiz());

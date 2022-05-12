@@ -6,7 +6,7 @@
         <meta name="color-scheme" content="dark">
         <link href="/static/cdn/bootstrap-night.min.css" rel="stylesheet">
 
-        <title>sudu</title>
+        <title>hanzi</title>
         <link rel="shortcut icon" href="/static/logo.png">
         <link rel="stylesheet" href="/static/css.css">
         <script src="/static/cdn/jquery.min.js"></script>
@@ -23,10 +23,13 @@
           <!-- line label=a x1="0" y1="0" x2="100" y2="100" stroke="#DDD" /-->
           <!-- line label=b x1="0" y1="111" x2="100" y2="0" stroke="#DDD" /-->
         </svg>
-        <button id="go">go</button>
-        <span id="count">count</span>
-        <table id="stat">
-          <tr class="row">
+      </div>
+
+      <div id="ctl" class="row ">
+        <button id="go" class="col-10">go</button>
+        <span id="count" class="col-2"></span>
+        <table id="stat" class="col-12">
+          <tr>
             <td class=col-3></td>
             <td class=col-3>mis</td>
             <td class=col-3>corr</td>
@@ -35,7 +38,7 @@
         </table>
       </div>
 
-        <div class="row fixed-bottom">
+        <div id="buts" class="row fixed-bottom">
           <button class="col-6">1</button>
           <button class="col-6">2</button>
           <button class="col-6">3</button>
@@ -48,6 +51,10 @@
     <!-- script -->
         <script src="/static/cdn/bootstrap.bundle.min.js"></script>
         <script src="/static/cdn/hanzi-writer.js"></script>
+        <script src="/voc.js"></script>
+        <script src="/mistake.js"></script>
+        <script src="/correct.js"></script>
+        <script src="/complete.js"></script>
         <script src="/static/js.js"></script>
         {% block script %}{% endblock %}
 </html>
