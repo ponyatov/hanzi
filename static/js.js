@@ -73,16 +73,42 @@ function w() {
 function timer(count) {
   if (count > 0) {
     // console.log(count);
-    $('#count').text(count);
+    $('#count').val(count);
     setTimeout(timer(count - 1), 1111);
   }
 }
 
+window.speechSynthesis.cancel();  // reset
+
+zhtts = new SpeechSynthesisUtterance();
+zhtts.lang = 'zh';
+zhtts.say = function(text) {
+  zhtts.text = text;
+  window.speechSynthesis.speak(zhtts);
+};
+
+rutts = new SpeechSynthesisUtterance();
+rutts.lang = 'ru';
+rutts.say = function(text) {
+  rutts.text = text;
+  window.speechSynthesis.speak(rutts);
+};
+
+
 function nextQuiz() {
   // clear
   $('#hanzi').empty();
+  var char = randvoc();
+  //
+  var ru = voc[char].ru;
+  $('#ru').text(ru);
+  rutts.say(ru);
+  //
+  var pin = voc[char].pinyin;
+  $('#pinyin').text(pin);
+  zhtts.say(pin);
   // next hanzi
-  var hanzi = HanziWriter.create('hanzi', randvoc(), {
+  var hanzi = HanziWriter.create('hanzi', char, {
     width: w(),
     height: w(),
     strokeColor: '#444',
@@ -105,19 +131,19 @@ function nextQuiz() {
       timer(11);
       hanzi.quiz({
         onMistake: (strokeData) => {
-          console.log('onMistake:', strokeData);
+          // console.log('onMistake:', strokeData);
           mis(strokeData.character);
         },
         onCorrectStroke: (strokeData) => {
-          console.log('onCorronCorrectStroke', strokeData);
+          // console.log('onCorronCorrectStroke', strokeData);
           cor(strokeData.character);
         },
         onComplete: (summaryData) => {
-          console.log('onComplete:', summaryData);
+          // console.log('onComplete:', summaryData);
           compl(summaryData.character);
           // $('#hanzi').fadeOut(FADE).fadeIn(FADE);
           setTimeout(() => {
-            $('#go').trigger('click');
+            $('#ru').trigger('click');
           }, FADE * 1);
         }
       });
@@ -168,6 +194,7 @@ $(() => {
   window.onresize = resize;
   $(window).trigger('resize');
   //
-  $('#go').on('click', (e) => nextQuiz());
-  $('#go').trigger('click');
+  $('#ru').on('click', nextQuiz);
+  $('#ru').trigger('click');
+  $('#pinyin').on('click', () => zhtts.say($('#pinyin').text()));
 });

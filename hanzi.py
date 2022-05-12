@@ -20,6 +20,15 @@ voc = {
     '十': 10,
 }
 
+import pinyin
+for (key, val) in voc.items():
+    ru = val
+    pin = pinyin.get(key)
+    voc[key] = {
+        'ru': ru,
+        'pinyin': pin,
+    }
+
 @app.route('/voc.js')
 def vocjs(): return f'const voc = {voc};'
 
