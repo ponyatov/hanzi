@@ -9,6 +9,9 @@ PEPS   = E26,E302,E305,E401,E402,E701,E702
 CDNJS  = https://cdnjs.cloudflare.com/ajax/libs
 JSDLVR = https://cdn.jsdelivr.net/npm
 
+IP     ?= 127.0.0.1
+PORT   ?= 12345
+
 # version
 JQUERY_VER  = 3.6.0
 BS_DARK_VER = 1.1.3
@@ -41,7 +44,7 @@ gen:
 
 .PHONY: web
 web: $(PY) $(MODULE).py
-	$^ $@
+	IP=$(IP) PORT=$(PORT) $^ $@
 
 # format
 .PHONY: format
