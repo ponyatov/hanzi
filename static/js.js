@@ -44,8 +44,9 @@ function rnd(min, max) {
 }
 
 last = undefined;
+char = undefined;
 function randvoc() {
-  var char = keys[rnd(0, keys.length - 1)];
+  char = keys[rnd(0, keys.length - 1)];
   if (char == last)
     return randvoc();
   else {
@@ -94,6 +95,42 @@ rutts.say = function(text) {
   window.speechSynthesis.speak(rutts);
 };
 
+function say(char, ru) {
+  rutts.say(ru);
+  zhtts.say(char);
+}
+
+hanzi = undefined;
+
+function quiz() {
+  hanzi.quiz({
+    onMistake: (strokeData) => {
+      // console.log('onMistake:', strokeData);
+      mis(strokeData.character);
+    },
+    onCorrectStroke: (strokeData) => {
+      // console.log('onCorronCorrectStroke', strokeData);
+      cor(strokeData.character);
+    },
+    onComplete: (summaryData) => {
+      // console.log('onComplete:', summaryData);
+      compl(summaryData.character);
+      // $('#hanzi').fadeOut(FADE).fadeIn(FADE);
+      setTimeout(() => {
+        $('#ru').trigger('click');
+      }, FADE * 1);
+    }
+  });
+}
+
+function showHanzi() {
+  setTimeout(() => {
+    zhtts.say(char);
+  }, 1);
+  hanzi.animateCharacter({
+    onComplete: quiz,
+  });
+}
 
 function nextQuiz() {
   // clear
@@ -102,13 +139,13 @@ function nextQuiz() {
   //
   var ru = voc[char].ru;
   $('#ru').text(ru);
-  rutts.say(ru);
   //
   var pin = voc[char].pinyin;
   $('#pinyin').text(pin);
-  zhtts.say(pin);
+
+  setTimeout(() => say(char, ru), 1);
   // next hanzi
-  var hanzi = HanziWriter.create('hanzi', char, {
+  hanzi = HanziWriter.create('hanzi', char, {
     width: w(),
     height: w(),
     strokeColor: '#444',
@@ -117,7 +154,7 @@ function nextQuiz() {
     strokeAnimationSpeed: 1.1,  // 5x normal speed
     delayBetweenStrokes: 10,    // milliseconds
     highlightOnComplete: true,
-    // showCharacter: false,
+    showCharacter: false,
     showOutline: false,
     charDataLoader: (char, onComplete) => {
       $.getJSON(`/hanzi/${char}.json`, (charData) => {
@@ -126,29 +163,7 @@ function nextQuiz() {
     }
   });
   // animate & quiz
-  hanzi.animateCharacter({
-    onComplete: () => {
-      timer(11);
-      hanzi.quiz({
-        onMistake: (strokeData) => {
-          // console.log('onMistake:', strokeData);
-          mis(strokeData.character);
-        },
-        onCorrectStroke: (strokeData) => {
-          // console.log('onCorronCorrectStroke', strokeData);
-          cor(strokeData.character);
-        },
-        onComplete: (summaryData) => {
-          // console.log('onComplete:', summaryData);
-          compl(summaryData.character);
-          // $('#hanzi').fadeOut(FADE).fadeIn(FADE);
-          setTimeout(() => {
-            $('#ru').trigger('click');
-          }, FADE * 1);
-        }
-      });
-    }
-  });
+  quiz();
 }
 
 function statInit() {
@@ -167,7 +182,7 @@ function statInit() {
 
 function resize() {
   ww = w();
-  vv = window.innerWidth - ww * 1.05;
+  vv = window.innerWidth - ww * 1.1;
   console.log('resize', ww);
   $('#hanzi').width(ww);
   $('#hanzi').height(ww);
@@ -196,5 +211,5 @@ $(() => {
   //
   $('#ru').on('click', nextQuiz);
   $('#ru').trigger('click');
-  $('#pinyin').on('click', () => zhtts.say($('#pinyin').text()));
+  $('#pinyin').on('click', showHanzi);
 });
