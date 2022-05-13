@@ -30,6 +30,7 @@
     },
     "files.associations": {
         "metaL.gen":"python", "rc":"python",
+        "app.manifest":"jinja-json",
     },
 
     // editor
