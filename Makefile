@@ -86,17 +86,21 @@ doc:
 	rsync -rv ~/mdoc/bib/Erlang/*    doc/bib/Erlang/
 
 # install
+.PHONY: install update updev
 install: $(OS)_install doc gz
 	$(MAKE) update
+	$(MIX)  local.hex
 update: $(OS)_update doc gz
 	$(PIP) install --user -U pip autopep8 xxhash
 	$(PIP) install --user -U -r requirements.txt
 	$(MIX) deps.get
+updev: update
+	sudo apt install -yu `cat apt.dev`
 
 GNU_Linux_install:
 GNU_Linux_update:
 	sudo apt update
-	sudo apt install -yu `cat apt.txt apt.dev`
+	sudo apt install -yu `cat apt.txt`
 
 gz: \
 	static/cdn/hanzi-writer.js \

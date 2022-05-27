@@ -31,11 +31,22 @@
     }
 }
 
+@media (max-width: 800px) {
+    #stat {
+        display: none;
+    }
+}
+
 button,#count {
     min-height: 5mm;
     max-height: 10mm;
 }
 
-#stat * {
-    border: 1px solid #111;
+#stat {
+    /* display: inline-block; */
+    border: 1px solid cyan;
+    position: absolute;
+    right:0;
+    width: 128px;
+    height: 128px;
 }
