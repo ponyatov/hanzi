@@ -57,8 +57,6 @@ function randvoc() {
 
 const sock = new WebSocket('ws://' + location.host + '/sock');
 
-console.log(sock);
-
 sock.onclose = e => {
   window.location.reload();
 };
@@ -66,6 +64,8 @@ sock.onclose = e => {
 sock.onmessage = e => {
   console.log(e.data);
 };
+
+console.log(sock);
 
 function w() {
   return Math.min(window.innerWidth, window.innerHeight / 2)
@@ -133,10 +133,9 @@ function showHanzi() {
 }
 
 function nextQuiz() {
-  // clear
   $('#hanzi').empty();
-  var char = randvoc();
   //
+  var char = randvoc();
   var ru = voc[char].ru;
   $('#ru').text(ru);
   //

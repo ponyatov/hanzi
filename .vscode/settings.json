@@ -5,32 +5,36 @@
             "sequence": [
                 "workbench.action.files.saveAll",
                 {"command": "workbench.action.terminal.sendSequence",
-                    "args": {"text": "\u000D clear ; LANG=C make gen format \u000D"}}]
-                    // "args": {"text": "\u000D clear ; LANG=C make format \u000D"}}]
+                    "args": {"text": "\u000D clear ; make gen format \u000D"}}]
         },
         {
             "command": "multiCommand.f12",
             "sequence": [
                 "workbench.action.files.saveAll",
                 {"command": "workbench.action.terminal.sendSequence",
-                    "args": {"text": "\u000D clear ; LANG=C make all \u000D"}}]
+                    "args": {"text": "\u000D clear ; make all \u000D"}}]
         },
     ],
 
     // files
     "files.exclude": {
-        "**/docs/**":true,
-        "**/hanzi/**":true,
-        "**/.vscode/*.log":true,
-        "**/__pycache__/**":true,
+        "docs/**":true,
+        "hanzi/**":true,
+        ".vscode/*.log":true,
+        "__pycache__/**":true,
+        ".elixir_ls/**":true,
+        "_build/**":true,
+        "deps/**":true,
     },
     "files.watcherExclude": {
-        "**/docs/**":true,
-        "**/__pycache__/**":true,
+        "docs/**":true,
+        "hanzi/**":true,
+        "__pycache__/**":true,
+        ".elixir_ls/**":true,
+        "_build/**":true,
+        "deps/**":true,
     },
     "files.associations": {
-        "metaL.gen":"python", "rc":"python",
-        "app.manifest":"jinja-json",
     },
 
     // editor

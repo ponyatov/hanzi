@@ -1,0 +1,3 @@
+# SCUT-COUCH
+
+For computational tractability, it is usual to focus on a restricted number of characters, deemed most representative of usage in daily life. Thus, the standard [[GB2312-80]] set includes only 6,763 entries (3,755 and 3,008 characters in the [[GB2312-80#level-1]] and [[GB2312-80|level-2]] sets, respectively). The closely aligned character set used in the popular [[hanzi/CASIA]] databases, built by the [[org/Institute of Automation of Chinese Academy of Sciences]], comprises a total of 7,356 entries [[6]](https://machinelearning.apple.com/research/handwriting#6). The [[hanzi/SCUT-COUCH]] database has similar coverage [[8]](https://machinelearning.apple.com/research/handwriting#8).

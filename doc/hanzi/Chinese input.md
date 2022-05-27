@@ -1,0 +1,2 @@
+# Chinese input
+## [[Chinese handwriting]]

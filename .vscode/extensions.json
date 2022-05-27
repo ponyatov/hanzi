@@ -11,5 +11,7 @@
         "tht13.python",
         // web
         "abusaidm.html-snippets",
+        // erlang
+        "jakebecker.elixir-ls",
     ]
 }

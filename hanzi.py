@@ -118,12 +118,12 @@ less6 = {
     '舌': 'язык',
     '示': 'уведомлять', '礻': 'показывать',
     '衤': 'одежда', '衫': 'рубашка', '裤': 'штаны',
-
 }
 
 
-voc = digits | less1 | less2 | less3 | less33 | less4 | colors
-voc |= less5 | less6
+# voc = digits | less1 | less2 | less3 | less33 | less4 | colors
+# voc = voc | less5 | less6
+voc = less6
 
 import pinyin
 for (key, val) in voc.items():
@@ -185,5 +185,9 @@ def hanzi(path):
 
 if __name__ == '__main__':
     for i in sys.argv: print(i)
-    app.run(debug=True, host=config.HOST, port=config.PORT,
-            extra_files=['static/js.js', 'static/css.css', 'templates/index.html'])
+    app.run(
+        debug=True, host=config.HOST, port=config.PORT,
+        extra_files=[
+            'static/js.js', 'static/css.css',
+            'templates/index.html'
+        ])

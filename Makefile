@@ -9,14 +9,15 @@ PEPS   = E26,E302,E305,E401,E402,E701,E702
 CDNJS  = https://cdnjs.cloudflare.com/ajax/libs
 JSDLVR = https://cdn.jsdelivr.net/npm
 
-IP     ?= 127.0.0.1
-PORT   ?= 12345
-
 # version
 JQUERY_VER  = 3.6.0
 BS_DARK_VER = 1.1.3
 BS_VER      = 5.1.3
 HANZI_VER   = 3.2
+
+# dir
+CWD   = $(CURDIR)
+TMP   = $(CWD)/tmp
 
 # tool
 CURL   = curl -L -o
@@ -24,54 +25,78 @@ CF     = clang-format
 PY     = $(shell which python3)
 PIP    = $(shell which pip3)
 PEP    = $(shell which autopep8)
+IEX    = iex
+MIX    = mix
 
 # src
-P += $(MODULE).py config.py
-P += metaL.gen rc
-S += $(P)
-J += static/js.js
+P += $(MODULE).py config/__init__.py
+P += metaL.py $(MODULE).meta.py
+S += $(P) rc
+J += static/js.js static/elixir.js
 S += $(J)
+X += mix.exs
+X += $(shell find lib    -type f -regex .+.ex$$)
+X += $(shell find test   -type f -regex .+.ex$$)
+X += $(shell find config -type f -regex .+.ex$$)
+S += $(X) $(E)
 
 # all
 .PHONY: all
 all:
+	$(MIX)  compile
 	$(MAKE) format
 
-GEN = py flask web js hanzi
-.PHONY: gen
-gen:
-	./metaL.gen $(GEN) && $(MAKE) format
+.PHONY: flask
+flask: $(PY) $(MODULE).py
+	$^ $@
 
-.PHONY: web
-web: $(PY) $(MODULE).py
-	IP=$(IP) PORT=$(PORT) $^ $@
+.PHONY: watch
+watch:
+	$(IEX) -S $(MIX)
+
+.PHONY: gen
+gen: $(PY) $(MODULE).meta.py
+	$^ && $(MAKE) format
 
 # format
 .PHONY: format
-format: tmp/format_py tmp/format_js
+format: tmp/format_py tmp/format_js tmp/format_ex
 
 tmp/format_py: $(P)
 	$(PEP) --ignore=$(PEPS) -i $? && touch $@
+
 tmp/format_js: $(J)
 	$(CF) -style=google -i $? && touch $@
 
+tmp/format_ex: $(X)
+	$(MIX) format && touch $@
+
 # doc
+
+.PHONY: doxy
 doxy: doxy.gen
 	rm -rf docs ; doxygen $< 1>/dev/null
 
+.PHONY: doc
 doc:
+	mkdir -p doc/bib
+	rsync -rv ~/mdoc/hanzi/*         doc/hanzi/
+	rsync -rv ~/mdoc/Erlang/*        doc/Erlang/
+	rsync -rv ~/mdoc/Elixir/*        doc/Elixir/
+	rsync -rv ~/mdoc/bib/Erlang/*    doc/bib/Erlang/
 
 # install
 install: $(OS)_install doc gz
 	$(MAKE) update
 update: $(OS)_update doc gz
-	$(PIP) install --user -U pip autopep8 pytest
+	$(PIP) install --user -U pip autopep8 xxhash
 	$(PIP) install --user -U -r requirements.txt
+	$(MIX) deps.get
 
 GNU_Linux_install:
 GNU_Linux_update:
 	sudo apt update
-	sudo apt install -yu `cat apt.txt`
+	sudo apt install -yu `cat apt.txt apt.dev`
 
 gz: \
 	static/cdn/hanzi-writer.js \
@@ -94,8 +119,8 @@ static/cdn/bootstrap.bundle.min.js.map:
 
 # merge
 MERGE  = Makefile README.md .clang-format doxy.gen $(S)
+MERGE += .vscode bin doc config lib inc src tmp test
 MERGE += apt.dev apt.txt requirements.txt
-MERGE += .vscode bin doc lib src tmp
 MERGE += static templates
 
 dev:
@@ -103,6 +128,7 @@ dev:
 	git checkout $@
 	git pull -v
 	git checkout shadow -- $(MERGE)
+	$(MAKE) doc && git add doc
 
 shadow:
 	git push -v
