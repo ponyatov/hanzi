@@ -46,9 +46,16 @@ button,#count {
     /* display: inline-block; */
     border: 1px solid cyan;
     position: absolute;
-    right:0;
+    right: 0;
     width: 128px;
     height: 128px;
     max-height: 128px;
     overflow: hidden;
+}
+
+#stas {
+    border: 1px solid cyan;
+    position: absolute;
+    left: 0;
+    bottom: 0;
 }

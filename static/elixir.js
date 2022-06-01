@@ -221,7 +221,9 @@ function resize() {
   //
   $('#stat').css({'top': $('#hanzi').position().top});
   $('#stat').height(ww);
+  $('#stas').width(ww);
   $('#stat').width(window.innerWidth * .9 - ww);
+  $('#stas').height(window.innerHeight * .85 - ww);
   hh = window.innerHeight * .95 - $('#navbar').height();
   $('#stat').height(hh);
   $('#stat').css({'height': hh});
@@ -290,15 +292,22 @@ function showHanzi() {
 }
 
 function stat() {
+  $('#stas').text('');
   $('#stat').text('');
+  function info(char) {
+    ret = `<tr>`;
+    ret += `<td>${char}</td>`
+    ret += `<td>${voc[char].ru || '?'}</td>`
+    ret += `<td>${voc[char].pinyin || '?'}</td>`
+    ret += `<td>${voc[char].miss || '?'}</td>`
+    ret += `</tr>`;
+    return ret;
+  }
   keys.forEach(char => {
-    info = `<tr>`;
-    info += `<td>${char}</td>`
-    info += `<td>${voc[char].ru || '?'}</td>`
-    info += `<td>${voc[char].pinyin || '?'}</td>`
-    info += `<td>${voc[char].miss || '?'}</td>`
-    info += `</tr>`;
-    $('#stat').append(info);
+    $('#stas').append(info(char));
+  });
+  allkeys.forEach(char => {
+    $('#stat').append(info(char));
   });
 }
 
