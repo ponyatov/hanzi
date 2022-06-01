@@ -21,19 +21,68 @@ const key = {
   '右': {ru: 'правый', pinyin: 'yoù'},
 };
 
+const key1 = {
+  '丨': {ru: '|', pinyin: 'gǔn'},
+  '丶': {ru: 'точка', pinyin: 'zhǔ'},
+  '丿': {ru: 'откидная влево'},
+  '亅': {ru: 'крюк', pinyin: 'jué'},
+  '亠': {ru: 'точка/1', pinyin: 'tóu'},
+  '人': {ru: 'человек', pinyin: 'rén'},
+  '儿': {ru: 'Идущий человек', pinyin: 'r'},
+  '小': {ru: 'Маленький'},
+  '大': {ru: 'Большой'},
+  '冖': {ru: 'Крышка', pinyin: 'mì'},
+  '宀': {ru: 'Крыша'},
+  '女': {ru: 'Женщина'},
+  '子': {ru: 'Сын'},
+  '口': {ru: 'Рот', pinyin: 'koǔ'},
+  '马': {ru: 'Лошадь'},
+  '彳': {ru: 'Шаг левой', pinyin: 'chì'},
+  '艮': {ru: 'Крепкий'},
+  '尸': {ru: 'Труп', pinyin: 'shī'},
+  '匕': {ru: 'Черпак'},
+  '力': {ru: 'Сила'},
+  '刀': {ru: 'Нож', pinyin: 'dāo'},
+  '刂': {ru: 'Нож'},
+  '水': {ru: 'Вода'},
+  '氵': {ru: 'Вода'},
+  '冫': {ru: 'Лёд'},
+  '火': {ru: 'Огонь', pinyin: 'huǒ'},
+  '灬': {ru: 'Огонь'}
+};
+
+const key2 = {
+
+};
+
+const key3 = {
+
+};
+
+const key4 = {
+
+};
+
+const key5 = {
+
+};
+
+const key6 = {
+
+};
+
+
 const school = {
   // '​老':{ru:'старый', pinyin:'​lǎo'}, // hwd
   '师': {ru: 'учитель', pinyin: 'shī'},
   '上': {ru: 'начало', pinyin: 'shàng'},
   '下': {ru: 'конец', pinyin: 'xià'},
   '课': {ru: 'урок', pinyin: 'kè'},
-  '请': {ru: 'пожалуйста', pinyin: 'qǐng'},
   '坐': {ru: 'присаживайтесь'},
   '听': {ru: 'слушать', pinyin: 'tīng'},
   '看': {ru: 'смотреть'},
   '页': {ru: 'страница'},
   '说': {ru: 'говорить', pinyin: 'shuō'},
-  '问': {ru: 'спрашивать', pinyin: 'wèn'},
   '进': {ru: 'входить', pinyin: 'jìn'},
   '读': {ru: 'зачитывать', pinyin: 'dú'},
   '书': {ru: 'книга', pinyin: 'shū'},
@@ -45,7 +94,23 @@ const school = {
   '不': {ru: 'нет', pinyin: 'bù'},
   '再': {ru: 'снова'},
   '见': {ru: 'увидимся'},
+  '请': {ru: 'пожалуйста', pinyin: 'qǐng'},
+  '问': {ru: 'спрашивать', pinyin: 'wèn'},
+  '叫': {ru: 'вызывать'},
+};
 
+const p28L = {
+  '你': {ru: 'ты', pinyin: 'nǐ'},
+  '好': {ru: 'хорошо', pinyin: 'hǎo'},
+  '请': {ru: 'пожалуйста', pinyin: 'qǐng'},
+  '问': {ru: 'спрашивать', pinyin: 'wèn'},
+  '叫': {ru: 'вызывать', pinyin: 'jiào'},
+  '什': {ru: 'shen', pinyin: 'shén'},
+  '么': {ru: 'me', pinyin: 'me'},
+  '名': {ru: 'имя', pinyin: 'míng'},
+  '字': {ru: 'произношение', pinyin: 'zì'},
+  '我': {ru: 'я', pinyin: 'wǒ'},
+  '呢': {ru: 'спец?', pinyin: 'ne'},
 };
 
 const mestoim = {
@@ -60,14 +125,42 @@ const mestoim = {
   '么': {ru: 'какой?', pinyin: 'me'},
 };
 
-const voc = Object.assign(digits, key, school, mestoim);
+const voc = Object.assign(digits, key, key1, school, p28L, mestoim);
 
-const keys = Object.keys(voc);
+const allkeys = Object.keys(voc);
+
+let keys = [];
+
+function seven() {
+  keys = []
+  rus = []
+  limit = allkeys.length * allkeys.length;
+  while (keys.length < 7 && limit--) {
+    char = allkeys[rand(allkeys.length)];
+    ru = voc[char].ru;
+    if (!keys.includes(char) && !rus.includes(ru)) {
+      keys.push(char);
+      rus.push(ru);
+      voc[char].miss = 0x1;  // force repeat N times
+    }
+  }
+}
+seven();
+
+function frame() {
+  misses = 0;
+  keys.forEach(char => {misses += voc[char].miss});
+  if (!misses) seven();
+}
 
 function rnd(min, max) {
   // https://learn.javascript.ru/task/random-int-min-max
   let rand = min + Math.random() * (max + 1 - min);
   return Math.floor(rand);
+}
+
+function rand(max) {
+  return rnd(0, max - 1);
 }
 
 last = undefined;
@@ -86,7 +179,7 @@ function randvoc() {
       for (j = 0; j < maxmiss + 1; j++) sel += [char];
   });
   //
-  char = keys[rnd(0, keys.length - 1)];
+  char = keys[rand(keys.length)];
   if (char == last)
     return randvoc();
   else {
@@ -129,12 +222,17 @@ function resize() {
   $('#stat').css({'top': $('#hanzi').position().top});
   $('#stat').height(ww);
   $('#stat').width(window.innerWidth * .9 - ww);
-  $('#stat').height(window.innerHeight * .95 - $('#navbar').height());
+  hh = window.innerHeight * .95 - $('#navbar').height();
+  $('#stat').height(hh);
+  $('#stat').css({'height': hh});
+  $('#stat').css({'min-height': hh});
+  $('#stat').css({'max-height': hh});
 }
 
 window.speechSynthesis.cancel();  // reset
 
 function quiz() {
+  stat();
   hanzi.quiz({
     onComplete: (summaryData) => {
       ({character, totalMistakes} = summaryData);
@@ -143,10 +241,9 @@ function quiz() {
       if (!totalMistakes & voc[character].miss > 0) voc[character].miss -= 1;
       // console.log(voc[character]);
       zhtts.say(char);
-      setTimeout(() => $('#ru').trigger('click'), 2222);
-      //
-      keys.forEach(char => {console.log(voc[char])});
-      console.log('');
+      setTimeout(nextQuiz, 2222);
+      stat();
+      frame();
     },
   });
 }
@@ -163,7 +260,7 @@ function nextQuiz() {
     $.ajax({
       url: `/pinyin/${char}`,
       success: (pin) => {
-        console.log(`'${char}':{ru:'${voc[char].ru}', pinyin:'${pin}'},`);
+        console.log(`'${char}': {ru: '${voc[char].ru}', pinyin: '${pin}'},`);
         voc[char].pinyin = pin;
         $('#pinyin').text(pin);
       }
@@ -185,23 +282,35 @@ function nextQuiz() {
 }
 
 function showHanzi() {
+  voc[char].miss = voc[char].miss + 0x10 || 0x10;
   setTimeout(() => zhtts.say(char), 1);
   hanzi.animateCharacter({
     onComplete: quiz,
   });
 }
 
-function statInit() {
-  keys.forEach(char => {$('#stat').add(`<span id="${char}">${char}<span>`)});
+function stat() {
+  $('#stat').text('');
+  keys.forEach(char => {
+    info = `<tr>`;
+    info += `<td>${char}</td>`
+    info += `<td>${voc[char].ru || '?'}</td>`
+    info += `<td>${voc[char].pinyin || '?'}</td>`
+    info += `<td>${voc[char].miss || '?'}</td>`
+    info += `</tr>`;
+    $('#stat').append(info);
+  });
 }
 
 $(() => {
-  statInit();
   //
   window.onresize = resize;
   $(window).trigger('resize');
   //
-  $('#ru').on('click', nextQuiz);
+  $('#ru').on('click', () => {
+    seven();
+    nextQuiz();
+  });
   $('#ru').trigger('click');
   $('#pinyin').on('click', showHanzi);
 });

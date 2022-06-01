@@ -49,4 +49,6 @@ button,#count {
     right:0;
     width: 128px;
     height: 128px;
+    max-height: 128px;
+    overflow: hidden;
 }
