@@ -16,7 +16,7 @@ defmodule Hanzi.MixProject do
     [
       mod: {Hanzi.App, []},
       extra_applications: [
-        # :sync,
+        :remix,
         :logger,
         :cowboy,
         :plug
@@ -26,7 +26,7 @@ defmodule Hanzi.MixProject do
 
   defp deps do
     [
-      # {:sync, "~> 0.2"},
+      {:remix, "~> 0.0", only: :dev},
       {:cowboy, "~> 2.0"},
       {:plug, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},

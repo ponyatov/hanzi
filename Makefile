@@ -35,9 +35,9 @@ S += $(P) rc
 J += static/js.js static/elixir.js
 S += $(J)
 X += mix.exs
-X += $(shell find lib    -type f -regex .+.ex$$)
-X += $(shell find test   -type f -regex .+.ex$$)
-X += $(shell find config -type f -regex .+.ex$$)
+X += $(shell find lib    -type f -regex .+.exs?$$)
+X += $(shell find test   -type f -regex .+.exs?$$)
+X += $(shell find config -type f -regex .+.exs?$$)
 S += $(X) $(E)
 
 # all
@@ -50,9 +50,16 @@ all:
 flask: $(PY) $(MODULE).py
 	$^ $@
 
+.PHONY: elixir
+elixir:
+	$(MIX)  compile
+	$(MAKE) format
+
 .PHONY: watch
 watch:
+	$(MAKE) elixir
 	$(IEX) -S $(MIX)
+	$(MAKE) $@
 
 .PHONY: gen
 gen: $(PY) $(MODULE).meta.py
@@ -84,6 +91,7 @@ doc:
 	rsync -rv ~/mdoc/Erlang/*        doc/Erlang/
 	rsync -rv ~/mdoc/Elixir/*        doc/Elixir/
 	rsync -rv ~/mdoc/bib/Erlang/*    doc/bib/Erlang/
+	rsync -rv ~/mdoc/PostgreSQL/*    doc/PostgreSQL/
 
 # install
 .PHONY: install update updev

@@ -3,13 +3,15 @@ defmodule Hanzi.App do
   require Logger
 
   def start(_type, _args) do
-    Hanzi.Telemetry.setup()
-    Logger.debug(inspect({__MODULE__, :web, " http://127.0.0.1:14735 "}))
+    # Hanzi.Telemetry.setup()
+    port = Application.get_env(:hanzi, :port)
+
+    Logger.info(inspect({__MODULE__, :web, " http://127.0.0.1:#{port} "}))
 
     children = [
       {
         Plug.Cowboy,
-        scheme: :http, plug: Hanzi.Router, options: [port: 14735]
+        scheme: :http, plug: Hanzi.Router, options: [port: port]
       }
     ]
 

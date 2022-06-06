@@ -1,12 +1,13 @@
 defmodule Hanzi.Router do
   use Plug.Router
 
-  plug(Plug.Telemetry, event_prefix: [__MODULE__])
+  # plug(Plug.Telemetry, event_prefix: [__MODULE__])
 
   plug(Plug.Static, at: "/static", from: "static", zip: true)
   plug(Plug.Static, at: "/doc", from: "doc", zip: true)
 
   plug(:match)
+  plug(Plug.Logger)
   plug(:dispatch)
 
   get "/" do

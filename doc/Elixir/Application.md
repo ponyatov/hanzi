@@ -1,4 +1,25 @@
-# Elixir/ `application`
+# Application
+
+## `start()`
+
+```Elixir
+defmodule Web.Application do
+  use Application
+
+  def start(_type, _args) do
+    children = []
+    opts = [strategy: :one_for_one, name: __MODULE__]
+    Supervisor.start_link(children, opts)
+  end
+end
+```
+
+- [[children]] список подчинённых процессов
+- `opts` опции для [[супервизор]]а
+- [[Supervisor#start_link]]
+- [[strategy]] стратегия работы [[супервизор]]а
+	- [[strategy#one_for_one]]
+	- [[__MODULE__]]
 
 ## basics
 
@@ -12,18 +33,6 @@
 
 https://code.tutsplus.com/articles/elixir-applications--cms-29598
 
-## startup
-
-```elixir
-defmodule Sample.App do
-  use Application
-  def start(_type, _args) do
-    children = []
-    opts = [strategy: :one_for_one, name: Sample.Supervisor]
-    Supervisor.start_link(children, opts)
-  end
-end
-```
 
 The `start/2` function must either return `{:ok, pid}` (with an optional state as the third item) or `{:error, reason}`.
 
