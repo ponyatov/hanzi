@@ -4,7 +4,7 @@ defmodule Hanzi.App do
 
   def start(_type, _args) do
     # Hanzi.Telemetry.setup()
-    port = Application.get_env(:hanzi, :port)
+    port = Application.get_env(:hanzi, :port, 12345)
 
     Logger.info(inspect({__MODULE__, :web, " http://127.0.0.1:#{port} "}))
 
